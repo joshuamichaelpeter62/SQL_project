@@ -40,7 +40,7 @@ Data Cleaning Steps
   6. Removed duplicate records
 
 # project license
---- **This license is under [MIT license]
+--- **This license is under [MIT license]**
 
 # About me
 i am Joshua Michael Peter, studying Data science at kigali independent Univeristy (Rwanda). This is my first project in SQL data warehouse
