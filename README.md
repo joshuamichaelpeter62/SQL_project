@@ -3,19 +3,17 @@
 -- *Welcome to "data warehouse and analytic project" repository*
 
 # Objective
-This project focuses on building a simple Data Warehouse ETL pipeline using SQL Server.
-The goal is to transform raw, dirty data into clean, structured data ready for analysis.
+--- **This project focuses on building a simple Data Warehouse ETL pipeline using SQL Server.**
+--- **The goal is to transform raw, dirty data into clean, structured data ready for analysis.**
+--- **Sales performance by transforming raw transactional data into clean, structured data for reporting and decision-making**.
+--- **Product performance**
+--- **Sale trend**
 
 #Specification 
 -- **Data Source**: data from CSV file
 -- **Data Quality**: clean and resolve data quality issue prior to analysis
 -- **Intergration**: Make a data source user friendly data model designed for analytical queries
 -- **Documentation** provide clear documentation of the data model
-
-# Objective
---- **Sales performance by transforming raw transactional data into clean, structured data for reporting and decision-making**.
---- **Product performance**
---- **Sale trend**
 
 # project license
 --- **This license is under [MIT license]**
