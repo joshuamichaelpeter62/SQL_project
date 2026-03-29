@@ -15,9 +15,6 @@
 -- **Intergration**: Make a data source user friendly data model designed for analytical queries
 -- **Documentation** provide clear documentation of the data model
 
-# project license
---- **This license is under [MIT license]**
-
 # Architecture
 The project follows a Medallion Architecture:
   1. Bronze Layer → Raw data (dirty, inconsistent)
