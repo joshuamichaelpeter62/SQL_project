@@ -1,0 +1,184 @@
+/* ============================================================
+   Script Name   : Bronze Layer Load Procedure
+
+   Description   :
+       This procedure performs a full load of raw CSV files into
+       the Bronze layer tables of the Data_exploration database.
+
+   Purpose       :
+       - Truncate existing Bronze tables
+       - Reload fresh raw data from CSV files
+       - Track load duration for each table
+       - Display number of rows loaded
+
+   Warning       :
+       This procedure performs a FULL LOAD.
+       Existing data in Bronze tables will be deleted.
+       Make sure the CSV file paths are correct and accessible.
+
+   Dependencies  :
+       - SQL Server
+       - Existing Bronze tables
+       - CSV files stored in the specified folder
+============================================================ */
+
+-- Execute the procedure
+EXEC Bronze.load_Bronze;
+GO
+
+USE Data_exploration;
+GO
+
+CREATE OR ALTER PROCEDURE Bronze.load_Bronze
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE 
+        @start_time DATETIME,
+        @end_time DATETIME,
+        @batch_start_time DATETIME,
+        @batch_end_time DATETIME;
+
+    BEGIN TRY
+        -- Start total batch timer
+        SET @batch_start_time = GETDATE();
+
+        PRINT '==========================================';
+        PRINT 'Loading Bronze Layer Started';
+        PRINT '==========================================';
+
+        -- =====================================================
+        -- Load Bronze.customers
+        -- =====================================================
+        SET @start_time = GETDATE();
+
+        PRINT '>> Truncating table: Bronze.customers';
+        TRUNCATE TABLE Bronze.customers;
+
+        PRINT '>> Inserting data into: Bronze.customers';
+        BULK INSERT Bronze.customers
+        FROM 'C:\Users\jonas\OneDrive\Desktop\Data\DW_SUPERSTORE_BALANCED\1_customers.csv'
+        WITH (
+            FIRSTROW = 2,
+            FIELDTERMINATOR = ',',
+            ROWTERMINATOR = '\n',
+            TABLOCK
+        );
+
+        PRINT '>> Rows loaded into Bronze.customers: ' + CAST(@@ROWCOUNT AS NVARCHAR);
+        SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '------------------------------------------';
+
+        -- =====================================================
+        -- Load Bronze.products
+        -- =====================================================
+        SET @start_time = GETDATE();
+
+        PRINT '>> Truncating table: Bronze.products';
+        TRUNCATE TABLE Bronze.products;
+
+        PRINT '>> Inserting data into: Bronze.products';
+        BULK INSERT Bronze.products
+        FROM 'C:\Users\jonas\OneDrive\Desktop\Data\DW_SUPERSTORE_BALANCED\2_products.csv'
+        WITH (
+            FIRSTROW = 2,
+            FIELDTERMINATOR = ',',
+            ROWTERMINATOR = '\n',
+            TABLOCK
+        );
+
+        PRINT '>> Rows loaded into Bronze.products: ' + CAST(@@ROWCOUNT AS NVARCHAR);
+        SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '------------------------------------------';
+
+        -- =====================================================
+        -- Load Bronze.store
+        -- =====================================================
+        SET @start_time = GETDATE();
+
+        PRINT '>> Truncating table: Bronze.store';
+        TRUNCATE TABLE Bronze.store;
+
+        PRINT '>> Inserting data into: Bronze.store';
+        BULK INSERT Bronze.store
+        FROM 'C:\Users\jonas\OneDrive\Desktop\Data\DW_SUPERSTORE_BALANCED\3_stores.csv'
+        WITH (
+            FIRSTROW = 2,
+            FIELDTERMINATOR = ',',
+            ROWTERMINATOR = '\n',
+            TABLOCK
+        );
+
+        PRINT '>> Rows loaded into Bronze.store: ' + CAST(@@ROWCOUNT AS NVARCHAR);
+        SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '------------------------------------------';
+
+        -- =====================================================
+        -- Load Bronze.employee
+        -- =====================================================
+        SET @start_time = GETDATE();
+
+        PRINT '>> Truncating table: Bronze.employee';
+        TRUNCATE TABLE Bronze.employee;
+
+        PRINT '>> Inserting data into: Bronze.employee';
+        BULK INSERT Bronze.employee
+        FROM 'C:\Users\jonas\OneDrive\Desktop\Data\DW_SUPERSTORE_BALANCED\4_employees.csv'
+        WITH (
+            FIRSTROW = 2,
+            FIELDTERMINATOR = ',',
+            ROWTERMINATOR = '\n',
+            TABLOCK
+        );
+
+        PRINT '>> Rows loaded into Bronze.employee: ' + CAST(@@ROWCOUNT AS NVARCHAR);
+        SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '------------------------------------------';
+
+        -- =====================================================
+        -- Load Bronze.sale
+        -- =====================================================
+        SET @start_time = GETDATE();
+
+        PRINT '>> Truncating table: Bronze.sale';
+        TRUNCATE TABLE Bronze.sale;
+
+        PRINT '>> Inserting data into: Bronze.sale';
+        BULK INSERT Bronze.sale
+        FROM 'C:\Users\jonas\OneDrive\Desktop\Data\DW_SUPERSTORE_BALANCED\5_sales.csv'
+        WITH (
+            FIRSTROW = 2,
+            FIELDTERMINATOR = ',',
+            ROWTERMINATOR = '\n',
+            TABLOCK
+        );
+
+        PRINT '>> Rows loaded into Bronze.sale: ' + CAST(@@ROWCOUNT AS NVARCHAR);
+        SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '------------------------------------------';
+
+        -- End total batch timer
+        SET @batch_end_time = GETDATE();
+
+        PRINT '==========================================';
+        PRINT 'Loading Bronze Layer Completed Successfully';
+        PRINT 'Total Load Duration: ' + CAST(DATEDIFF(SECOND, @batch_start_time, @batch_end_time) AS NVARCHAR) + ' seconds';
+        PRINT '==========================================';
+
+    END TRY
+    BEGIN CATCH
+        PRINT '==========================================';
+        PRINT 'ERROR OCCURRED DURING LOADING BRONZE LAYER';
+        PRINT 'Error Message: ' + ERROR_MESSAGE();
+        PRINT 'Error Number : ' + CAST(ERROR_NUMBER() AS NVARCHAR);
+        PRINT 'Error State  : ' + CAST(ERROR_STATE() AS NVARCHAR);
+        PRINT '==========================================';
+    END CATCH
+END;
+GO
