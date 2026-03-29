@@ -1,1 +1,101 @@
+/* ============================================================
+   Script Name   : Bronze Tables Creation Script
+   Author        : Joshua Michael Peter
+  DDL script: Create Bronze tables 
+   Description   :
+       This script creates all Bronze layer tables used in the 
+       Data Warehouse project.
+
+   Purpose       :
+       - Store raw (uncleaned) data from CSV files
+       - Preserve original data structure
+       - Allow flexible data types (VARCHAR) for dirty data
+
+   Warning       :
+       Existing Bronze tables will be DROPPED if they exist
+       All data inside these tables will be LOST
+
+============================================================ */
+
+--- create tables for Bronze layer ---
+
+-- ============================================================
+-- Create Bronze.customers table
+-- ============================================================
+
+-- Drop table if it already exists
+if OBJECT_ID('Bronze.customers', 'u') is not null
+	drop table Bronze.customers
+-- Create table to store raw customer data
+create table Bronze.customers (
+	customer_id int,
+	first_name nvarchar (255),
+	last_name nvarchar (255),
+	gender nvarchar (255),
+	city nvarchar (255),
+	annual_income int
+);
+go
+
+-- ============================================================
+-- Create Bronze.products table
+-- ============================================================
+if OBJECT_ID('Bronze.products','u') is not null
+	drop table Bronze.products
+-- Store raw product data
+create table Bronze.products (
+	product_id int,
+	product_name nvarchar (255),
+	category nvarchar (255),
+	unit_price int,
+	stock_quantity int
+);
+go
+
+-- ============================================================
+-- Create Bronze.store table
+-- ============================================================
+if OBJECT_ID('Bronze.store','u') is not null
+	drop table Bronze.store
+-- Store raw store/location data
+create table Bronze.store (
+	store_id varchar(50),
+    store_name varchar(255),
+    region varchar(255),
+    annual_target varchar(50)
+);
+go
+
+-- ============================================================
+-- Create Bronze.employee table
+-- ============================================================
+if OBJECT_ID('Bronze.employee', 'u') is not null
+	drop table Bronze.employee
+-- Store raw employee data (kept as VARCHAR for cleaning later)
+create table Bronze.employee (
+	employee_id varchar(25),
+	employee_name nvarchar (255),
+	department nvarchar (255),
+	salary varchar (25),
+	hire_date varchar (25)
+);
+go
+
+-- ============================================================
+-- Create Bronze.sale table
+-- ============================================================
+if OBJECT_ID('Bronze.sale', 'u') is not null
+	drop table Bronze.sale
+-- Store raw transactional sales data
+create table Bronze.sale (
+	sale_id varchar(50),
+    customer_id varchar(50),
+    product_id varchar(50),
+    store_id varchar(50),
+    employee_id varchar(50),
+    quantity varchar(50),
+    sales_amount varchar(50),
+    profit varchar(50),
+    order_date varchar(50)
+);
 
