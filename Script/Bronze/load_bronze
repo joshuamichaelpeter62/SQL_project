@@ -20,6 +20,11 @@
        - SQL Server
        - Existing Bronze tables
        - CSV files stored in the specified folder
+   Parameters:
+   this procedure does not accept any parameter or return any values
+   Usage Example
+   EXEC Bronze.load_Bronze;
+   GO
 ============================================================ */
 
 -- Execute the procedure
