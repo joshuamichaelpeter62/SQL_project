@@ -1,6 +1,6 @@
 # this is my data warehouse analytic project using SQL server
 
--- *Welcome to "dataware and analytic project" repository*
+-- *Welcome to "data warehouse and analytic project" repository*
 
 # Objective
 This project focuses on building a simple Data Warehouse ETL pipeline using SQL Server.
