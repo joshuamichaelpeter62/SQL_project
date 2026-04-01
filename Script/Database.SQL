@@ -81,6 +81,16 @@ select name from sys.schemas
 go
 
 -- ============================================
+-- Check tables in Bronze schema
+-- ============================================
+
+-- View all tables that belong to the Bronze layer
+SELECT *
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_SCHEMA = 'Bronze';
+go
+
+-- ============================================
 -- Check tables in Silver schema
 -- ============================================
 
@@ -89,3 +99,12 @@ SELECT *
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA = 'Silver';
 go
+
+-- ============================================
+-- Check tables in Gold schema
+-- ============================================
+
+-- View all tables that belong to the Gold layer
+SELECT *
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_SCHEMA = 'Gold';
