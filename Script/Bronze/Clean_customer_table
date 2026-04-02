@@ -1,0 +1,199 @@
+/* ============================================
+   Script: Silver Customers Load
+   Author: Joshua Michael Peter
+
+   Description:
+   This script cleans customer data from
+   Bronze.customers and loads it into
+   Silver.customers.
+
+   Cleaning Steps:
+   - Remove duplicate customer_id
+   - Trim spaces in names
+   - Standardize gender values
+   - Standardize city names
+   - Replace invalid annual_income with NULL
+
+============================================ */
+
+use Data_exploration
+go
+
+select * from Bronze.customers
+go
+
+truncate table Silver.customers;
+insert into Silver.customers (
+    customer_id,
+    first_name,
+    last_name,
+    gender,
+    city,
+    annual_income
+)
+select
+
+    ---==========================================---
+    --- clean first name by removing unmainted spaces
+    ---==========================================---
+	customer_id,
+	CASE
+        WHEN TRIM(first_name) = '' THEN NULL
+        ELSE TRIM(first_name)
+    END AS first_name,
+    CASE
+        WHEN TRIM(last_name) = '' THEN NULL
+        ELSE TRIM(last_name)
+    END AS last_name,
+
+    ---==========================================---
+    --- clean gender 
+    ---==========================================---
+	CASE 
+        WHEN UPPER(TRIM(gender)) IN ('M','MALE') THEN 'Male'
+        WHEN UPPER(TRIM(gender)) IN ('F','FEMALE') THEN 'Female'
+        ELSE 'Unknown'
+    END AS gender,
+
+    ---==========================================---
+    --- clean city
+    ---==========================================---
+	CASE
+        when TRIM(city) = '' THEN NULL
+        WHEN UPPER(TRIM(city)) IN ('LA','LOS ANGELES') THEN 'Los Angeles'
+        WHEN UPPER(TRIM(city)) IN ('NY','NEW YORK') THEN 'New York'
+        ELSE TRIM(city)
+    END as city,
+
+    ---==========================================---
+    ---clean annual income
+    ---==========================================---
+	CASE
+        WHEN annual_income < 0 THEN NULL
+        ELSE annual_income
+    END AS annual_income
+
+    ---==========================================---
+    --- clean customer id by removing duplicated customer id
+
+    ---==========================================---
+        FROM
+    (
+        SELECT *,
+               ROW_NUMBER() OVER(
+               PARTITION BY customer_id
+               ORDER BY 
+                   CASE WHEN first_name IS NOT NULL AND TRIM(first_name) <> '' THEN 0 ELSE 1 END,
+                   CASE WHEN last_name IS NOT NULL AND TRIM(last_name) <> '' THEN 0 ELSE 1 END,
+                   CASE WHEN city IS NOT NULL AND TRIM(city) <> '' THEN 0 ELSE 1 END,
+                   CASE WHEN annual_income IS NOT NULL AND annual_income >= 0 THEN 0 ELSE 1 END
+               ) AS rn
+        FROM Bronze.customers
+        WHERE customer_id IS NOT NULL
+    ) t
+    WHERE rn = 1;
+go
+
+select * from Silver.customers
+---==========================================---
+--- check for distinct values in gender
+---==========================================---
+select distinct gender from Bronze.customers
+go
+select distinct city from Bronze.customers
+go
+
+---==========================================---
+-- check negative or unrealistic values
+---==========================================---
+select * from Bronze.customers where annual_income < 0
+go
+
+---==========================================---
+--- check for duplicated values
+---==========================================---
+select customer_id, count(*) as duplicated
+from Bronze.customers
+group by customer_id
+having count(*) > 1 or customer_id is null
+go
+
+---==========================================---
+---- check for unwanted spaces in customer table
+---==========================================---
+select first_name from 
+Bronze.customers
+where first_name != TRIM(first_name)
+
+---==========================================---
+---check space in gender -
+---==========================================---
+SELECT gender
+FROM Bronze.customers
+WHERE gender <> TRIM(gender);
+
+select * from Silver.customers
+go
+---==========================================---
+--- check for distinct values in gender, first_name and city
+---==========================================---
+select distinct first_name from Silver.customers
+go
+select distinct gender from Silver.customers
+go
+select distinct city from Silver.customers
+go
+
+---==========================================---
+-- check negative or unrealistic values
+---==========================================---
+select * from Silver.customers where annual_income < 0
+go
+
+---==========================================---
+--- check for duplicated values
+---==========================================---
+select customer_id, count(*) as duplicated
+from Silver.customers
+group by customer_id
+having count(*) > 1 or customer_id is null
+go
+
+---==========================================---
+---- check for unwanted spaces in customer table
+---==========================================---
+select last_name from 
+Silver.customers
+where last_name != TRIM(last_name)
+go
+
+---==========================================---
+--- check for space in first_name 
+---==========================================---
+select first_name from 
+Silver.customers
+where first_name != TRIM(first_name)
+go
+
+---==========================================---
+---check for missing values
+---==========================================---
+SELECT *
+FROM Silver.customers
+WHERE first_name IS NULL
+   OR last_name IS NULL
+   OR city IS NULL;
+
+---==========================================---
+--- check for missing gender values
+---==========================================---
+SELECT *
+FROM Silver.customers
+WHERE gender IS NULL OR gender = '';
+
+---==========================================---
+--- check city space
+---==========================================---
+SELECT city
+FROM Silver.customers
+WHERE city <> TRIM(city);
