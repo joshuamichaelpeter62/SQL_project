@@ -1,6 +1,6 @@
-# 🏗️ Data Warehouse & Analytics Project (SQL Server)
+# Data Warehouse & Analytics Project (SQL Server)
 
-## 📌 Overview
+## Overview
 
 Welcome to the **Data Warehouse and Analytics Project** repository.
 
@@ -8,7 +8,7 @@ This project demonstrates how to build a simple **ETL pipeline using SQL Server*
 
 ---
 
-## 🎯 Objective
+## Objective
 
 The objective of this project is to design and implement a data warehouse solution that enables business insights from transactional sales data.
 
@@ -24,7 +24,7 @@ Key goals:
 
 ---
 
-## ⚙️ Specifications
+## Specifications
 
 * **Data Source**: CSV files
 * **Data Quality**: Data is cleaned and validated before analysis
@@ -33,7 +33,7 @@ Key goals:
 
 ---
 
-## 🧱 Architecture
+## Architecture
 
 This project follows the **Medallion Architecture**:
 
@@ -43,7 +43,7 @@ This project follows the **Medallion Architecture**:
 
 ---
 
-## 🔑 Key Features
+## Key Features
 
 * Data cleaning and transformation using SQL Server
 * Handling of:
@@ -60,7 +60,7 @@ This project follows the **Medallion Architecture**:
 
 ---
 
-## 🧹 Data Cleaning Process
+## Data Cleaning Process
 
 * Trimmed text fields (e.g., names, departments)
 * Converted numeric fields using `TRY_CAST`
@@ -71,7 +71,7 @@ This project follows the **Medallion Architecture**:
 
 ---
 
-## 📊 Outcome
+## Outcome
 
 * Clean and reliable dataset
 * Ready for analytics and reporting
@@ -79,13 +79,13 @@ This project follows the **Medallion Architecture**:
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the **MIT License**.
 
 ---
 
-## 👨‍💻 About Me
+## About Me
 
 My name is **Joshua Michael Peter**, a Data Science student at **Kigali Independent University (Rwanda)**.
 
